@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>Đổi địa chỉ máy chủ</title>
+<style>
+  body {
+    margin: 0; padding: 20px; font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0f172a; color: #f1f5f9;
+  }
+  .sub { color: #94a3b8; font-size: 13px; margin-bottom: 12px; line-height: 1.4; }
+  input {
+    width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid #334155;
+    color: #f1f5f9; padding: 10px; border-radius: 8px; font-size: 14px; margin-bottom: 14px;
+  }
+  .row { display: flex; gap: 10px; justify-content: flex-end; }
+  button {
+    border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; cursor: pointer;
+  }
+  #saveBtn { background: #2563eb; color: #fff; }
+  #cancelBtn { background: #334155; color: #f1f5f9; }
+</style>
+</head>
+<body>
+  <div class="sub">
+    Địa chỉ máy chủ hệ thống bắt số (ví dụ <code>http://192.168.1.23:4000</code> nếu widget này
+    và máy chủ nằm trên 2 máy khác nhau trong cùng mạng LAN, hoặc <code>http://localhost:4000</code>
+    nếu cùng 1 máy). Ứng dụng sẽ khởi động lại các cửa sổ để áp dụng địa chỉ mới.
+  </div>
+  <input id="urlInput" type="text" placeholder="http://192.168.1.23:4000" />
+  <div class="row">
+    <button id="cancelBtn">Huỷ</button>
+    <button id="saveBtn">Lưu</button>
+  </div>
+
+<script>
+  (async () => {
+    const input = document.getElementById('urlInput');
+    input.value = await window.widgetBridge.getServerUrl();
+    input.focus();
+    input.select();
+  })();
+
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const url = document.getElementById('urlInput').value.trim().replace(/\/+$/, '');
+    if (!url) return;
+    window.widgetBridge.saveServerUrl(url);
+  });
+  document.getElementById('cancelBtn').addEventListener('click', () => {
+    window.widgetBridge.closePrompt();
+  });
+  document.getElementById('urlInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('saveBtn').click();
+  });
+</script>
+</body>
+</html>

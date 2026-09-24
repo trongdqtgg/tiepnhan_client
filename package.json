@@ -1,0 +1,72 @@
+{
+  "name": "quay-tiep-nhan-widget",
+  "version": "2.0.0",
+  "description": "Widget desktop luon-noi-ben-tren cho man hinh quay tiep nhan cua He thong bat so.",
+  "main": "main.js",
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win --x64",
+    "build:portable": "electron-builder --win portable --x64"
+  },
+  "dependencies": {
+    "pdf-to-printer": "^5.8.1"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.queuesystem.counterwidget",
+    "productName": "Widget Quầy Tiếp Nhận",
+    "files": [
+      "main.js",
+      "preload.js",
+      "config.js",
+      "server-url-prompt.html",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/pdf-to-printer/dist/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "QuayTiepNhan-Widget-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "QuayTiepNhan-Widget-Portable-${version}.${ext}"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "trongdqtgg",
+        "repo": "tiepnhan_client",
+        "releaseType": "release"
+      }
+    ]
+  }
+}
