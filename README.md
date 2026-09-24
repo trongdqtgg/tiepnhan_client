@@ -81,3 +81,13 @@ Script: `npm ci` → kiểm tra cú pháp `main.js`, `preload.js`, `config.js` +
 Widget không còn dùng hộp thoại native (`alert`/`confirm`/`dialog.showMessageBox`). Trang web gọi
 `widgetBridge.showDialog()` khi cửa sổ quá nhỏ; `main.js` mở cửa sổ hộp thoại riêng (`showAppDialog()`)
 và trả focus về cửa sổ gốc khi đóng. Cần cập nhật **cả server và widget** để hết lỗi hoàn toàn.
+
+## 8. Tự động cập nhật (từ bản có mục 117 của server)
+
+- Widget tự kiểm tra GitHub Release (repo trong `build.publish` của `package.json`) 1 phút sau khi mở rồi
+  mỗi 4 giờ, có bản mới thì tải ngầm; tải xong báo bằng thông báo Windows + mục khay hệ thống
+  **"⬆ Cập nhật lên vX (khởi động lại)"**. Không bấm thì tự cài khi thoát ứng dụng.
+- Khay hệ thống → **"Kiểm tra cập nhật (đang dùng vX)"** để kiểm tra ngay.
+- Bản portable không tự cài được: chỉ báo có bản mới và mở trang tải về.
+- Repo widget nên để public. Máy đang dùng bản cũ (chưa có tính năng này) cần cài tay bản mới 1 lần.
+- Mã: `updater.js` (+ vài dòng trong `main.js`, `preload.js`), thư viện `electron-updater`.

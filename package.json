@@ -1,6 +1,6 @@
 {
   "name": "quay-tiep-nhan-widget",
-  "version": "2.0.0",
+  "version": "2.9.0",
   "description": "Widget desktop luon-noi-ben-tren cho man hinh quay tiep nhan cua He thong bat so.",
   "main": "main.js",
   "author": "",
@@ -12,6 +12,7 @@
     "build:portable": "electron-builder --win portable --x64"
   },
   "dependencies": {
+    "electron-updater": "^6.8.9",
     "pdf-to-printer": "^5.8.1"
   },
   "devDependencies": {
@@ -25,6 +26,7 @@
       "main.js",
       "preload.js",
       "config.js",
+      "updater.js",
       "server-url-prompt.html",
       "assets/**/*",
       "node_modules/**/*"

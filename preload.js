@@ -41,6 +41,10 @@ contextBridge.exposeInMainWorld('widgetBridge', {
   // MUC 111: hop thoai tu ve (thay alert/confirm native) cho trang o cua so qua nho nhu thanh widget -
   // main process mo 1 cua so hop thoai rieng va TU TRA FOCUS ve cua so nay khi dong. Tra ve Promise<index nut>.
   showDialog: (opts) => ipcRenderer.invoke('show-dialog', opts),
+  // MUC 117: cap nhat widget (trang chu "/" hien trang thai + nut cap nhat khi mo trong widget)
+  getWidgetUpdateStatus: () => ipcRenderer.invoke('widget-update-status'),
+  checkWidgetUpdate: () => ipcRenderer.invoke('widget-update-check'),
+  installWidgetUpdate: () => ipcRenderer.invoke('widget-update-install'),
   // Dung rieng cho cua so nho "Đổi địa chỉ máy chủ" (server-url-prompt.html)
   getServerUrl: () => ipcRenderer.invoke('get-server-url'),
   saveServerUrl: (url) => ipcRenderer.send('save-server-url', url),

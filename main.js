@@ -26,6 +26,8 @@ const path = require('path');
 const http = require('http');
 const crypto = require('crypto');
 const { loadConfig, saveConfig } = require('./config');
+// MUC 117: tu dong kiem tra/cap nhat widget tu GitHub Release (xem updater.js)
+const updater = require('./updater');
 
 /**
  * `pdf-to-printer` (goi rieng, xem package.json "dependencies") - dung SumatraPDF (dong goi san
@@ -1651,6 +1653,9 @@ function buildTrayMenu() {
       ? [{ label: 'Mở file log lỗi in', click: () => shell.openPath(printIssueLogPath()) }]
       : []),
     { type: 'separator' },
+    // MUC 117: kiem tra cap nhat (chay ngam dinh ky + bam de kiem tra ngay) - xem updater.js
+    ...updater.trayMenuItems(),
+    { type: 'separator' },
     { label: 'Thoát', click: () => app.quit() },
   ]);
 }
@@ -1714,6 +1719,12 @@ app.whenReady().then(() => {
   createWidgetWindow();
   createTray();
   startLocalPrintServer();
+  // MUC 117: thong bao Windows (toast) can AppUserModelId trung voi appId cua bo cai NSIS
+  app.setAppUserModelId('com.queuesystem.counterwidget');
+  updater.init({
+    onChange: () => { if (tray && !tray.isDestroyed()) tray.setContextMenu(buildTrayMenu()); },
+    showDialog: (owner, opts) => showAppDialog(owner, opts),
+  });
 
   // MOI (theo yeu cau): "bổ sung thêm 1 cấu hình tự động mở fullscreen kiosk bốc số của bệnh nhân
   // khi khởi động" - xem autoOpenKioskOnStartup trong config.js. Goi SAU KHI da tao xong widget
@@ -1758,6 +1769,10 @@ app.whenReady().then(() => {
    * o lai trong tray, CHI app.quit() moi thuc su vuot qua duoc co che do).
    */
   ipcMain.on('quit-app', () => app.quit());
+  // MUC 117: trang chu "/" (mo trong widget) hien muc cap nhat widget - xem preload.js
+  ipcMain.handle('widget-update-status', () => updater.getState());
+  ipcMain.handle('widget-update-check', () => updater.check(false));
+  ipcMain.handle('widget-update-install', () => updater.install());
   // MUC 111: hop thoai tu ve cho trang web o cua so qua nho (thanh widget) - xem showAppDialog().
   ipcMain.handle('show-dialog', (event, opts) => {
     const owner = BrowserWindow.fromWebContents(event.sender);
